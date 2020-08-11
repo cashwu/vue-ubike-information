@@ -1,52 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>YouBike 臺北市公共自行車即時資訊</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>YouBike 臺北市公共自行車即時資訊</title>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-
-  <style>
-    body{ padding: 1em;  }
-  </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            padding: 1em;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@next"></script>
 
 </head>
 <body>
 
-  <h1>YouBike 臺北市公共自行車即時資訊</h1>
+<h1>YouBike 臺北市公共自行車即時資訊</h1>
 
-  <div id="app">
+
+<div id="app">
+
+    <p>
+        站點名稱搜尋: <input type="text" v-model.trim="nameSearch" @keyup="Search"/>
+    </p>
 
     <table class="table table-striped">
-      <thead>
+        <thead>
         <tr>
-          <th>#</th>
-          <th>場站名稱</th>
-          <th>場站區域</th>
-          <th>目前可用車輛</th>
-          <th>總停車格</th>
-          <th>資料更新時間</th>
+            <th @click="Search('no')" style="cursor: pointer">#</th>
+            <th>場站名稱</th>
+            <th>場站區域</th>
+            <th @click="Search('sbi')" style="cursor: pointer">目前可用車輛
+                <i class="fa"
+                   v-bind:class="{ 'fa-sort-asc' :sortSbiOrder === 'asc', 'fa-sort-desc' : sortSbiOrder === 'desc' }"
+                   aria-hidden="true"></i>
+            </th>
+            <th @click="Search('tot')" style="cursor: pointer">總停車格
+                <i class="fa"
+                   v-bind:class="{ 'fa-sort-asc' :sortTotOrder === 'asc', 'fa-sort-desc' : sortTotOrder === 'desc' }"
+                   aria-hidden="true"></i>
+            </th>
+            <th>資料更新時間</th>
         </tr>
-      </thead>
-      <tbody>
-        <tr v-for="s in ubikeStops">
-          <td>{{ s.sno }}</td>
-          <td>{{ s.sna }}</td>
-          <td>{{ s.sarea }}</td>
-          <td>{{ s.sbi }}</td>
-          <td>{{ s.tot }}</td>
-          <td>{{ s.mday | timeFormat }}</td>
+        </thead>
+        <tbody>
+        <tr v-for="s in uBikeStopsFilter">
+            <th>{{s.sno}}</th>
+            <th>{{s.sna}}</th>
+            <th>{{s.sarea}}</th>
+            <th>{{s.sbi}}</th>
+            <th>{{s.tot}}</th>
+            <th>{{s.mday}}</th>
         </tr>
-      </tbody>
-
+        </tbody>
     </table>
 
-  </div>
+</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="scripts.js"></script>
+<script src="scripts.js"></script>
 
 </body>
 </html>

@@ -1,40 +1,77 @@
-var vm = new Vue({
-    el: '#app',
-    data: {
-        ubikeStops: []
-    },
-    filters: {
-      timeFormat(t){
 
-        var date = [], time = [];
-
-        date.push(t.substr(0, 4));
-        date.push(t.substr(4, 2));
-        date.push(t.substr(6, 2));
-        time.push(t.substr(8, 2));
-        time.push(t.substr(10, 2));
-        time.push(t.substr(12, 2));
-
-        return date.join("/") + ' ' + time.join(":");
-      }
+const app = Vue.createApp({
+    data() {
+        return {
+            uBikeStops: [],
+            uBikeStopsFilter: [],
+            nameSearch: '',
+            sortNoOrder: "asc",
+            sortSbiOrder: "",
+            sortTotOrder: ""
+        }
     },
     created() {
-
-        // 欄位說明請參照:
-        // http://data.taipei/opendata/datalist/datasetMeta?oid=8ef1626a-892a-4218-8344-f7ac46e1aa48
-
-        // sno：站點代號、 sna：場站名稱(中文)、 tot：場站總停車格、
-        // sbi：場站目前車輛數量、 sarea：場站區域(中文)、 mday：資料更新時間、
-        // lat：緯度、 lng：經度、 ar：地(中文)、 sareaen：場站區域(英文)、
-        // snaen：場站名稱(英文)、 aren：地址(英文)、 bemp：空位數量、 act：全站禁用狀態
-
-        axios.get('https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz')
-            .then(res => {
-
-                // 將 json 轉陣列後存入 this.ubikeStops
-                this.ubikeStops = Object.keys(res.data.retVal).map(key => res.data.retVal[key]);
-
+        fetch('https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz')
+            .then(res => res.json())
+            .then(json => {
+                const stops = Object.keys(json.retVal).map(key => json.retVal[key]);
+                this.uBikeStopsFilter = this.uBikeStops = stops;
             });
+    },
+    methods: {
+        Search(sort = 'no') {
 
+            if (this.nameSearch === '') {
+                this.uBikeStopsFilter = this.uBikeStops;
+            } else {
+                this.uBikeStopsFilter = this.uBikeStops.filter(u => u.sna.includes(this.nameSearch));
+            }
+
+            if (sort === 'no') {
+                this.sortNo();
+            }
+            if (sort === 'sbi') {
+                this.sortSbi();
+            }
+            if (sort === 'tot') {
+                this.sortTot();
+            }
+        },
+        sortNo() {
+            this.sortTotOrder = '';
+            this.sortSbiOrder = '';
+
+            if (this.sortNoOrder === 'asc') {
+                this.sortNoOrder = 'desc'
+                this.uBikeStopsFilter.sort((a, b) => b.sno - a.sno);
+            } else {
+                this.sortNoOrder = 'asc'
+                this.uBikeStopsFilter.sort((a, b) => a.sno - b.sno);
+            }
+        },
+        sortSbi() {
+            this.sortTotOrder = '';
+            this.sortNoOrder = '';
+
+            if (this.sortSbiOrder === 'asc') {
+                this.sortSbiOrder = 'desc'
+                this.uBikeStopsFilter.sort((a, b) => b.sbi - a.sbi);
+            } else {
+                this.sortSbiOrder = 'asc'
+                this.uBikeStopsFilter.sort((a, b) => a.sbi - b.sbi);
+            }
+        },
+        sortTot(){
+            this.sortSbiOrder = '';
+            this.sortNoOrder = '';
+
+            if (this.sortTotOrder === 'asc') {
+                this.sortTotOrder = 'desc'
+                this.uBikeStopsFilter.sort((a, b) => b.tot - a.tot);
+            } else {
+                this.sortTotOrder = 'asc'
+                this.uBikeStopsFilter.sort((a, b) => a.tot - b.tot);
+            }
+        }
     }
-});
+}).mount('#app');
