@@ -30,19 +30,19 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th @click="Sort('sno', this.currSortOrder)" style="cursor: pointer">#
+            <th @click="Sort('sno', currSortOrder)" style="cursor: pointer">#
                 <i class="fa"
                    v-bind:class="{ 'fa-sort-asc' : currSortType === 'sno' && currSortOrder === 'asc',
                                     'fa-sort-desc' : currSortType === 'sno' && currSortOrder === 'desc' }" aria-hidden="true"></i>
             </th>
             <th>場站名稱</th>
             <th>場站區域</th>
-            <th @click="Sort('sbi', this.currSortOrder)" style="cursor: pointer">目前可用車輛
+            <th @click="Sort('sbi', currSortOrder)" style="cursor: pointer">目前可用車輛
                 <i class="fa"
                    v-bind:class="{ 'fa-sort-asc' : currSortType === 'sbi' && currSortOrder === 'asc',
                                     'fa-sort-desc' : currSortType === 'sbi' && currSortOrder === 'desc' }" aria-hidden="true"></i>
             </th>
-            <th @click="Sort('tot', this.currSortOrder)" style="cursor: pointer">總停車格
+            <th @click="Sort('tot', currSortOrder)" style="cursor: pointer">總停車格
                 <i class="fa"
                    v-bind:class="{ 'fa-sort-asc' :currSortType === 'tot' && currSortOrder === 'asc',
                                     'fa-sort-desc' : currSortType === 'tot' && currSortOrder === 'desc' }"
