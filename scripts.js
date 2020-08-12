@@ -1,13 +1,11 @@
-
 const app = Vue.createApp({
     data() {
         return {
             uBikeStops: [],
             uBikeStopsFilter: [],
             nameSearch: '',
-            sortNoOrder: "asc",
-            sortSbiOrder: "",
-            sortTotOrder: ""
+            currSortType: 'sno',
+            currSortOrder: 'asc'
         }
     },
     created() {
@@ -18,8 +16,13 @@ const app = Vue.createApp({
                 this.uBikeStopsFilter = this.uBikeStops = stops;
             });
     },
+    watch: {
+        nameSearch() {
+            this.Search();
+        },
+    },
     methods: {
-        Search(sort = 'no') {
+        Search() {
 
             if (this.nameSearch === '') {
                 this.uBikeStopsFilter = this.uBikeStops;
@@ -27,50 +30,20 @@ const app = Vue.createApp({
                 this.uBikeStopsFilter = this.uBikeStops.filter(u => u.sna.includes(this.nameSearch));
             }
 
-            if (sort === 'no') {
-                this.sortNo();
-            }
-            if (sort === 'sbi') {
-                this.sortSbi();
-            }
-            if (sort === 'tot') {
-                this.sortTot();
-            }
+            this.Sort(this.currSortType, '');
         },
-        sortNo() {
-            this.sortTotOrder = '';
-            this.sortSbiOrder = '';
+        Sort(sortType, sortOrder) {
 
-            if (this.sortNoOrder === 'asc') {
-                this.sortNoOrder = 'desc'
-                this.uBikeStopsFilter.sort((a, b) => b.sno - a.sno);
-            } else {
-                this.sortNoOrder = 'asc'
-                this.uBikeStopsFilter.sort((a, b) => a.sno - b.sno);
+            this.currSortType = sortType;
+
+            if (sortOrder !== ''){
+                this.currSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
             }
-        },
-        sortSbi() {
-            this.sortTotOrder = '';
-            this.sortNoOrder = '';
 
-            if (this.sortSbiOrder === 'asc') {
-                this.sortSbiOrder = 'desc'
-                this.uBikeStopsFilter.sort((a, b) => b.sbi - a.sbi);
+            if (this.currSortOrder === 'asc') {
+                this.uBikeStopsFilter.sort((a, b) => a[this.currSortType] - b[this.currSortType]);
             } else {
-                this.sortSbiOrder = 'asc'
-                this.uBikeStopsFilter.sort((a, b) => a.sbi - b.sbi);
-            }
-        },
-        sortTot(){
-            this.sortSbiOrder = '';
-            this.sortNoOrder = '';
-
-            if (this.sortTotOrder === 'asc') {
-                this.sortTotOrder = 'desc'
-                this.uBikeStopsFilter.sort((a, b) => b.tot - a.tot);
-            } else {
-                this.sortTotOrder = 'asc'
-                this.uBikeStopsFilter.sort((a, b) => a.tot - b.tot);
+                this.uBikeStopsFilter.sort((a, b) => b[this.currSortType] - a[this.currSortType]);
             }
         }
     }

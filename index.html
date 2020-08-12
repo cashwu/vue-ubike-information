@@ -24,23 +24,28 @@
 <div id="app">
 
     <p>
-        站點名稱搜尋: <input type="text" v-model.trim="nameSearch" @keyup="Search"/>
+        站點名稱搜尋: <input type="text" v-model.trim="nameSearch" />
     </p>
 
     <table class="table table-striped">
         <thead>
         <tr>
-            <th @click="Search('no')" style="cursor: pointer">#</th>
+            <th @click="Sort('sno', this.currSortOrder)" style="cursor: pointer">#
+                <i class="fa"
+                   v-bind:class="{ 'fa-sort-asc' : currSortType === 'sno' && currSortOrder === 'asc',
+                                    'fa-sort-desc' : currSortType === 'sno' && currSortOrder === 'desc' }" aria-hidden="true"></i>
+            </th>
             <th>場站名稱</th>
             <th>場站區域</th>
-            <th @click="Search('sbi')" style="cursor: pointer">目前可用車輛
+            <th @click="Sort('sbi', this.currSortOrder)" style="cursor: pointer">目前可用車輛
                 <i class="fa"
-                   v-bind:class="{ 'fa-sort-asc' :sortSbiOrder === 'asc', 'fa-sort-desc' : sortSbiOrder === 'desc' }"
-                   aria-hidden="true"></i>
+                   v-bind:class="{ 'fa-sort-asc' : currSortType === 'sbi' && currSortOrder === 'asc',
+                                    'fa-sort-desc' : currSortType === 'sbi' && currSortOrder === 'desc' }" aria-hidden="true"></i>
             </th>
-            <th @click="Search('tot')" style="cursor: pointer">總停車格
+            <th @click="Sort('tot', this.currSortOrder)" style="cursor: pointer">總停車格
                 <i class="fa"
-                   v-bind:class="{ 'fa-sort-asc' :sortTotOrder === 'asc', 'fa-sort-desc' : sortTotOrder === 'desc' }"
+                   v-bind:class="{ 'fa-sort-asc' :currSortType === 'tot' && currSortOrder === 'asc',
+                                    'fa-sort-desc' : currSortType === 'tot' && currSortOrder === 'desc' }"
                    aria-hidden="true"></i>
             </th>
             <th>資料更新時間</th>
