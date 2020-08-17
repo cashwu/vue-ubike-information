@@ -5,17 +5,14 @@
 
     <!-- 表格 -->
     <UbikeTable @resetcurrentpage="updateCurrentPage"
-                v-model:totalDataCount="totalDataCount"
+                v-model:totalPageCount="totalPageCount"
                 :search-text="searchText"
-                :current-Page="currentPage"
-                :count_of_page="10" />
+                :current-Page="currentPage" />
 
     <!-- 頁籤 -->
     <Pagination ref="pagination"
                 v-model:current-page="currentPage"
-                v-model:total-data-count="totalDataCount"
-                :pagination_max="10"
-                :count_of_page="10" />
+                v-model:total-page-count="totalPageCount" />
   </div>
 </template>
 
@@ -36,7 +33,7 @@ export default {
     return {
       searchText: "",
       currentPage: 1,
-      totalDataCount: 0
+      totalPageCount: 0
     };
   },
   methods: {

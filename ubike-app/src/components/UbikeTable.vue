@@ -54,17 +54,17 @@
 <script>
 
 export default {
-  name: "UbikeTable.vue",
+  name: "UbikeTable",
   props: {
     searchText: String,
     currentPage: Number,
-    count_of_page: Number
   },
   data() {
     return {
       currentSort: "sno",
       isSortDesc: false,
       ubikeStops: [],
+      countOfPage: 10
     }
   },
   computed: {
@@ -84,10 +84,10 @@ export default {
     },
     slicedUbikeStops() {
       // 將排序的結果做分頁切割
-      const start = (this.currentPage - 1) * this.count_of_page;
+      const start = (this.currentPage - 1) * this.countOfPage;
       const end =
-          start + this.count_of_page <= this.sortedUbikeStops.length
-              ? start + this.count_of_page
+          start + this.countOfPage <= this.sortedUbikeStops.length
+              ? start + this.countOfPage
               : this.sortedUbikeStops.length;
 
       return this.sortedUbikeStops.slice(start, end);
@@ -95,7 +95,8 @@ export default {
   },
   watch: {
     sortedUbikeStops() {
-      this.$emit("update:totalDataCount", this.filtedUbikeStops.length);
+      let totalPageCount = Math.ceil(this.filtedUbikeStops.length / this.countOfPage);
+      this.$emit("update:totalPageCount", totalPageCount);
       this.$emit("resetcurrentpage");
     },
   },

@@ -22,48 +22,42 @@
 
 <script>
 export default {
-  name: "Pagination.vue",
+  name: "Pagination",
   props: {
     currentPage : Number,
-    totalDataCount : Number,
-    pagination_max : Number,
-    count_of_page : Number
+    totalPageCount : Number
   },
   data() {
     return {
       selfCurrentPage : this.currentPage,
-      selfTotalDataCount : this.totalDataCount
+      paginationMax : 10
     }
   },
   computed: {
     pagerAddAmount() {
       // 頁碼位移
       const tmp =
-          this.selfTotalPageCount <= this.pagination_max
+          this.totalPageCount <= this.paginationMax
               ? 0
               : this.currentPage + 4 - this.pagerEnd;
 
       return tmp <= 0
           ? 0
-          : this.selfTotalPageCount - (this.pagination_max + tmp) < 0
-              ? this.selfTotalPageCount - this.pagination_max
+          : this.totalPageCount - (this.paginationMax + tmp) < 0
+              ? this.totalPageCount - this.paginationMax
               : tmp;
     },
     pagerEnd() {
       // 頁碼尾端
-      return this.selfTotalPageCount <= this.pagination_max
-          ? this.selfTotalPageCount
-          : this.pagination_max;
-    },
-    selfTotalPageCount() {
-      // 計算總頁數
-      return Math.ceil(this.totalDataCount / this.count_of_page);
+      return this.totalPageCount <= this.paginationMax
+          ? this.totalPageCount
+          : this.paginationMax;
     },
   },
   methods: {
     setPage(page) {
       // 設定目前頁數
-      if (page < 1 || page > this.selfTotalPageCount) {
+      if (page < 1 || page > this.totalPageCount) {
         return;
       }
       this.selfCurrentPage = page;

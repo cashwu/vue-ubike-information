@@ -4,20 +4,20 @@
 
 <script>
 export default {
-  name: "Search.vue",
+  name: "Search",
   props : {
     searchText : String
   },
-  data() {
-    return {
-      selfSearchText : this.searchText
+  computed : {
+    selfSearchText : {
+      get() {
+        return this.searchText;
+      },
+      set(value) {
+        this.$emit("update:searchText", value);
+      }
     }
   },
-  watch : {
-    selfSearchText(value) {
-      this.$emit("update:searchText", value);
-    }
-  }
 }
 </script>
 
